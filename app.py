@@ -145,8 +145,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("---")
-
-API_ENDPOINT = st.text_input("ODM Endpoint", value = "https://medicaid.westus.cloudapp.azure.com/DecisionService/rest/v1/ClaimsAdj/1.0/dateCheck/1.16", help="Enter the ODM service URL")
 # Create two columns for better layout
 col1, col2 = st.columns([1, 1])
 
