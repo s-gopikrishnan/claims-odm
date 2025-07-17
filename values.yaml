@@ -1,0 +1,23 @@
+replicaCount: 1
+
+image:
+  repository: uwupsub0tkacr01.azurecr.io/claims-ui
+  tag: v3.0.0
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  host: medicaid.westus.cloudapp.azure.com
+  path: /claims-ui
+  tlsSecret: claims-ui-tls
+  clusterIssuer: letsencrypt-prod
+
+secrets:
+  name: claims-api-credentials
+  username: "odmAdmin"
+  password: "X(UjCGCQROJKjR017W2Y5r"

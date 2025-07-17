@@ -37,4 +37,5 @@ temp_uploads/
 
 
 *.secret.yaml
+secret.yaml
 secrets/
