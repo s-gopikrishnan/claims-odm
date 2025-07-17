@@ -5,19 +5,38 @@ image:
   tag: v3.0.0
   pullPolicy: IfNotPresent
 
+namespace: claims-ui
+
 service:
+  name: claims-ui-service
   type: ClusterIP
   port: 80
+  targetPort: 8501
 
 ingress:
   enabled: true
   className: nginx
+  name: claims-ui-ingress
   host: medicaid.westus.cloudapp.azure.com
-  path: /claims-ui
+  path: /
   tlsSecret: claims-ui-tls
   clusterIssuer: letsencrypt-prod
 
+configMap:
+  name: claims-app-config
+  apiEndpoint: "https://medicaid.westus.cloudapp.azure.com/DecisionService/rest/v1/ClaimsAdj/1.0/dateCheck/1.17"
+
 secrets:
   name: claims-api-credentials
-  username: "odmAdmin"
-  password: "X(UjCGCQROJKjR017W2Y5r"
+  username: odmAdmin
+  password: "MASKED"
+
+containerPort: 8501
+
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"

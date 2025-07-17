@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: claims-app-config
-  namespace: claims-ui
+  name: {{ .Values.configMap.name }}
+  namespace: {{ .Values.namespace }}
 data:
-  API_ENDPOINT: "https://medicaid.westus.cloudapp.azure.com/DecisionService/rest/v1/ClaimsAdj/1.0/dateCheck/1.17"
+  API_ENDPOINT: "{{ .Values.configMap.apiEndpoint }}"

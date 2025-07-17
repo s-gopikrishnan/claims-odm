@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: claims-ui-service
-  namespace: claims-ui
+  name: {{ .Values.service.name }}
+  namespace: {{ .Values.namespace }}
 spec:
   selector:
-    app: claims-ui
+    app: {{ include "claims-ui.name" . }}
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 8501
-  type: ClusterIP
+    - protocol: TCP
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+  type: {{ .Values.service.type }}

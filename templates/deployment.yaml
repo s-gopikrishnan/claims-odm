@@ -1,60 +1,47 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: claims-ui-app
-  namespace: claims-ui
+  name: {{ include "claims-ui.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: claims-ui
+    app: {{ include "claims-ui.name" . }}
+    chart: {{ include "claims-ui.chart" . }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: claims-ui
+      app: {{ include "claims-ui.name" . }}
   template:
     metadata:
       labels:
-        app: claims-ui
+        app: {{ include "claims-ui.name" . }}
     spec:
-      imagePullSecrets:
-        - name: acr-secret
       containers:
         - name: streamlit-app
-          image: uwupsub0tkacr01.azurecr.io/claims-ui:v3.0.0
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 8501
+            - containerPort: {{ .Values.containerPort }}
           env:
             - name: API_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: claims-api-credentials
+                  name: {{ .Values.secrets.name }}
                   key: username
             - name: API_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: claims-api-credentials
+                  name: {{ .Values.secrets.name }}
                   key: password
             - name: API_ENDPOINT
               valueFrom:
                 configMapKeyRef:
-                  name: claims-app-config
+                  name: {{ .Values.configMap.name }}
                   key: API_ENDPOINT
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: "{{ .Values.resources.requests.memory }}"
+              cpu: "{{ .Values.resources.requests.cpu }}"
             limits:
-              memory: "512Mi"
-              cpu: "500m"
-          # Commenting probes until health endpoint exists
-          # livenessProbe:
-          #   httpGet:
-          #     path: /health
-          #     port: 8501
-          #   initialDelaySeconds: 30
-          #   periodSeconds: 10
-          # readinessProbe:
-          #   httpGet:
-          #     path: /health
-          #     port: 8501
-          #   initialDelaySeconds: 5
-          #   periodSeconds: 5
+              memory: "{{ .Values.resources.limits.memory }}"
+              cpu: "{{ .Values.resources.limits.cpu }}"
