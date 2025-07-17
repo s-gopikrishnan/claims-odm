@@ -34,3 +34,7 @@ temp_uploads/
 *.bin
 *.sqlite3
 *.db
+
+
+*.secret.yaml
+secrets/
