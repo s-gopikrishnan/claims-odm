@@ -19,7 +19,7 @@ spec:
         - name: acr-secret
       containers:
         - name: streamlit-app
-          image: uwupsub0tkacr01.azurecr.io/claims-ui:v3.0.0
+          image: uwupsub0tkacr01.azurecr.io/claims-ui:v4.0.0
           ports:
             - containerPort: 8501
           env:

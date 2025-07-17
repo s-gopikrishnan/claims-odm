@@ -38,24 +38,13 @@ st.set_page_config(
 st.markdown("""
 <style>
     .main-header {
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        color: white;
         padding: 1rem;
         border-radius: 10px;
         margin-bottom: 1rem;
         text-align: center;
     }
     
-    .rule-box {
-        background: #e3f2fd;
-        border-left: 5px solid #2196f3;
-        padding: 1rem;
-        margin: 1rem 0;
-        border-radius: 5px;
-    }
-    
     .success-box {
-        background: #d4edda;
         border-left: 5px solid #28a745;
         padding: 1rem;
         margin: 1rem 0;
@@ -63,19 +52,10 @@ st.markdown("""
     }
     
     .error-box {
-        background: #f8d7da;
         border-left: 5px solid #dc3545;
         padding: 1rem;
         margin: 1rem 0;
         border-radius: 5px;
-    }
-    
-    .metric-card {
-        background: #f8f9fa;
-        padding: 1rem;
-        border-radius: 10px;
-        border: 1px solid #dee2e6;
-        margin: 0.5rem 0;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -257,6 +237,13 @@ with col1:
             with st.spinner("Processing claim..."):
                 api_result = submit_claim(claim_payload)
             
+            # Only add to history here, once per submission:
+            if api_result.get("success"):
+                claim_result = api_result.get("response", {}).get("result", {})
+                status = claim_result.get("claimStatus", "Unknown")
+                messages = claim_result.get("messages", [])
+                add_to_history(claim_id, status, days_diff, messages)
+
             # Store result in session state for display
             st.session_state.last_result = api_result
             st.session_state.last_days_diff = days_diff
@@ -277,14 +264,6 @@ with col2:
             status = claim_result.get("claimStatus", "Unknown")
             messages = claim_result.get("messages", [])
             decision_id = result.get('__DecisionID__', 'N/A')
-            
-            # Add to history
-            add_to_history(
-                st.session_state.last_claim_id,
-                status,
-                st.session_state.last_days_diff,
-                messages
-            )
             
             # Display status with appropriate styling
             if status == "Approved":
