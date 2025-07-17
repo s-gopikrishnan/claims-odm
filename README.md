@@ -1,4 +1,7 @@
-# Claims UI Deployment on Azure AKS
+# Claims Pre-Check System
+
+A Streamlit-based web application that allows healthcare providers to validate insurance claims before submission. It integrates with IBM ODM decision services to apply business rules and determine claim eligibility in real time. The tool helps reduce claim rejections, improve compliance, and streamline the claims processing workflow.
+
 
 This repository contains the configuration and deployment scripts for hosting a **Streamlit-based UI** on **Azure Kubernetes Service (AKS)** with integration to backend services in the same cluster.
 
