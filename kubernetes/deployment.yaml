@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: claims-ui-app
+  namespace: claims-ui
+  labels:
+    app: claims-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: claims-ui
+  template:
+    metadata:
+      labels:
+        app: claims-ui
+    spec:
+      imagePullSecrets:
+        - name: acr-secret
+      containers:
+        - name: streamlit-app
+          image: uwupsub0tkacr01.azurecr.io/claims-ui:v3.0.0
+          ports:
+            - containerPort: 8501
+          env:
+            - name: API_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: claims-api-credentials
+                  key: username
+            - name: API_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: claims-api-credentials
+                  key: password
+            - name: API_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: claims-app-config
+                  key: API_ENDPOINT
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          # Commenting probes until health endpoint exists
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: 8501
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 10
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: 8501
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 5

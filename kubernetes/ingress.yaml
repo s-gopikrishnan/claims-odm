@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: claims-ui-ingress
+  namespace: claims-ui
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - medicaid.westus.cloudapp.azure.com
+    secretName: claims-ui-tls        # <--- TLS secret name here
+  rules:
+  - host: medicaid.westus.cloudapp.azure.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: claims-ui-service
+            port:
+              number: 80

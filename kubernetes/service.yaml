@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: claims-ui-service
+  namespace: claims-ui
+spec:
+  selector:
+    app: claims-ui
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8501
+  type: ClusterIP
