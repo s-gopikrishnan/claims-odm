@@ -11,12 +11,12 @@ spec:
   tls:
   - hosts:
     - medicaid.westus.cloudapp.azure.com
-    secretName: claims-ui-tls        # <--- TLS secret name here
+    secretName: claims-ui-tls
   rules:
   - host: medicaid.westus.cloudapp.azure.com
     http:
       paths:
-      - path: /
+      - path: /claims-ui
         pathType: Prefix
         backend:
           service:

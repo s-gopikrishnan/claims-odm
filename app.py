@@ -38,9 +38,6 @@ st.set_page_config(
 st.markdown("""
 <style>
     .main-header {
-        padding: 1rem;
-        border-radius: 10px;
-        margin-bottom: 1rem;
         text-align: center;
     }
     
